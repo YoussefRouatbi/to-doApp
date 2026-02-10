@@ -4,14 +4,12 @@
   let file = null;
   let content = "";
   let lines = [];
-  let tail = [];
   let filtered = "";
   let filteredLines = [];
   let filteredTail = [];
   let error = "";
   let showAlert = false;
 
-  // Typewriter
   let fullText = "Youssef Rouatbi";
   let displayText = "";
 
@@ -37,7 +35,6 @@
     reader.onload = () => {
       content = reader.result;
       lines = content.split("\n");
-      tail = lines.slice(-10);
       filtered = "";
       filteredLines = [];
       filteredTail = [];
@@ -60,16 +57,14 @@
   function filterFile() {
     if (!content) return;
 
-    // Remove duplicate emails
     const uniqueEmails = Array.from(
       new Set(lines.map(l => l.trim()).filter(l => l))
     );
+
     filteredLines = uniqueEmails;
     filteredTail = uniqueEmails.slice(-10);
     filtered = uniqueEmails.join("\n");
 
-    // Update tail in details
-    tail = filteredTail;
     showAlert = true;
   }
 
@@ -103,7 +98,6 @@
     </div>
   {/if}
 
-  <!-- File input -->
   <div
     class="w-full max-w-4xl border-2 border-dashed border-gray-600 rounded-lg
            p-6 text-center hover:border-indigo-500 transition"
@@ -118,31 +112,32 @@
   </div>
 
   {#if content}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-8xl mt-6">
-  <!-- Original Content -->
-  <div class="bg-black/40 rounded p-4 overflow-auto h-96">
-    <h2 class="font-semibold mb-2">Original Content</h2>
-    <pre class="text-sm whitespace-pre-wrap">{content}</pre>
-  </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-8xl mt-6">
 
-  <!-- Details -->
-  <div class="bg-black/40 rounded p-4 h-96 flex flex-col">
-    <h2 class="font-semibold mb-2">Details</h2>
-    <p class="mb-2">Lines: <span class="text-indigo-400">{filtered ? filteredLines.length : lines.length}</span></p>
-    <h3 class="font-semibold mt-4 mb-1">Tail (last 10 lines)</h3>
-    <pre class="text-sm whitespace-pre-wrap flex-1 overflow-auto">
-{filtered ? filteredTail.join("\n") : tail.join("\n")}
-    </pre>
-  </div>
-
-  <!-- Filtered Content -->
-  {#if filtered}
-    <div class="bg-black/40 rounded p-4 overflow-auto h-96">
-      <h2 class="font-semibold mb-2">Filtered Content</h2>
-      <pre class="text-sm whitespace-pre-wrap">{filtered}</pre>
-    </div>
-  {/if}
+<div class="bg-black/40 rounded p-4 overflow-auto h-96">
+  <h2 class="font-semibold mb-2 flex items-center justify-between">
+    Original Content
+    <span class="ml-2 bg-indigo-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
+      {lines.length}
+    </span>
+  </h2>
+  <pre class="text-sm whitespace-pre-wrap">{content}</pre>
 </div>
+
+{#if filtered}
+  <div class="bg-black/40 rounded p-4 overflow-auto h-96">
+    <h2 class="font-semibold mb-2 flex items-center justify-between">
+      Filtered Content
+      <span class="ml-2 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
+        {filteredLines.length}
+      </span>
+    </h2>
+    <pre class="text-sm whitespace-pre-wrap">{filtered}</pre>
+  </div>
+
+    {/if}
+
+    </div>
 
     <div class="flex gap-4 mt-6">
       <button
@@ -162,6 +157,7 @@
       {/if}
     </div>
   {/if}
+
   <div class="mt-10 text-center text-2xl font-bold text-indigo-400">
     <span>{displayText}</span><span class="animate-blink">|</span>
   </div>
