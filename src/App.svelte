@@ -1,4 +1,23 @@
 <script>
+  import { onMount } from "svelte";
+
+  let fullText = "Youssef Rouatbi";
+  let displayText = "";
+  
+  onMount(() => {
+    let index = 0;
+    const speed = 150;
+    
+    function type() {
+      if (index < fullText.length) {
+        displayText += fullText[index];
+        index++;
+        setTimeout(type, speed);
+      }
+    }
+    
+    type();
+  });
   let file = null;
   let content = "";
   let lines = [];
@@ -120,6 +139,9 @@
       {/if}
     </div>
   {/if}
+  <div class="mt-10 text-center text-2xl font-bold text-indigo-400">
+  <span>{displayText}</span><span class="animate-blink">|</span>
+</div>
 </div>
 
 <style>
